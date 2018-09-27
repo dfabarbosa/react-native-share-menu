@@ -6,6 +6,7 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.ActivityEventListener;
 
 import com.meedan.ShareMenuPackage;
 
@@ -17,13 +18,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 
-public class ShareMenuModule extends ReactContextBaseJavaModule {
+public class ShareMenuModule extends ReactContextBaseJavaModule implements ActivityEventListener {
 
   private ReactContext mReactContext;
 
   public ShareMenuModule(ReactApplicationContext reactContext) {
     super(reactContext);
     mReactContext = reactContext;
+    reactContext.addActivityEventListener(this);
   }
 
   @Override
@@ -31,7 +33,7 @@ public class ShareMenuModule extends ReactContextBaseJavaModule {
     return "ShareMenu";
   }
 
-  protected void onNewIntent(Intent intent) {
+  public void onNewIntent(Intent intent) {
     Activity mActivity = getCurrentActivity();
     
     if(mActivity == null) { return; }
@@ -91,4 +93,8 @@ public class ShareMenuModule extends ReactContextBaseJavaModule {
       intent.removeExtra(Intent.EXTRA_STREAM);
     }
   }
+  
+  public void onActivityResult(final int requestCode, final int resultCode, final Intent data) { }
+  
+  public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) { }
 }
